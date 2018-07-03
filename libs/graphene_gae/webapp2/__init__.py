@@ -6,7 +6,6 @@ import six
 from graphql import GraphQLError, format_error as format_graphql_error
 from examples.starwars.schema import schema as example_schema
 
-# テスト用データ挿入
 from examples.starwars.data import setup
 setup()
 
