@@ -4,9 +4,11 @@ import webapp2
 import six
 
 from graphql import GraphQLError, format_error as format_graphql_error
+from examples.starwars.schema import schema as example_schema
 
-__author__ = 'ekampf'
-
+# テスト用データ挿入
+from examples.starwars.data import setup
+setup()
 
 class GraphQLHandler(webapp2.RequestHandler):
     def get(self):
@@ -75,6 +77,8 @@ class GraphQLHandler(webapp2.RequestHandler):
 
         request_data.update(dict(self.request.GET))
 
+        request_data = json.loads(self.request.body)
+
         query = request_data.get('query', self.request.body)
         if not query:
             webapp2.abort(400, "Query is empty.")
@@ -127,7 +131,10 @@ class GraphQLHandler(webapp2.RequestHandler):
         self.response.content_type = 'application/json'
         self.response.out.write(serialized_data)
 
+config = {}
+config['graphql_schema'] = example_schema
 
-graphql_application = webapp2.WSGIApplication([
+graphql_application = webapp2.WSGIApplication(routes=[
     ('/graphql', GraphQLHandler)
-])
+], debug=True, config=config)
+

@@ -16,14 +16,37 @@
 # limitations under the License.
 
 import webapp2
+import os
+import sys
+import json
+import jinja2
+jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
+        print sys.path
         self.response.write(u'Hello, World!')
+
+class GraphiqlHandler(webapp2.RequestHandler):
+    def get(self):
+        query = self.request.get('query')
+        variables = self.request.get('variables')
+        response = ''
+        graphql_url = '/graphql'
+
+        values = dict( graphql_url=graphql_url, response=response,
+                      variables=variables,query=query.encode('unicode_escape'))
+
+
+        template = jinja_environment.get_template('templates/graphiql.html')
+
+        self.response.out.write(template.render(values))
+
 
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
+    ('/graphiql', GraphiqlHandler)
 ], debug=True)
 
