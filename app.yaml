@@ -3,5 +3,7 @@ api_version: 1
 threadsafe: true
 
 handlers:
+- url: /graphql
+  script: graphene_gae.webapp2.graphql_application
 - url: /.*
   script: main.app

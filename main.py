@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # Copyright 2016 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +17,13 @@
 
 import webapp2
 
-
 class MainPage(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
-        self.response.write('Hello, World!')
+        self.response.write(u'Hello, World!')
 
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
 ], debug=True)
+
